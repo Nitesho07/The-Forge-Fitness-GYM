@@ -1,0 +1,6 @@
+{
+  "name": "The Forge Fitness",
+  "description": "Premium industrial gym in Budh Vihar, New Delhi offering CrossFit, Cycling, Personal Training, and Weight Training.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
