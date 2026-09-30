@@ -2,6 +2,8 @@ import React from 'react';
 import { Star, MapPin, Phone, Clock, Instagram, ArrowUpRight } from 'lucide-react';
 import { BUSINESS_INFO, SERVICES, IMAGES } from '../data/gymData';
 import { PageId } from './Navbar';
+import { ScrollReveal } from './ui/ScrollReveal';
+import { CascadeText } from './ui/CascadeText';
 
 interface FooterProps {
   onNavigate: (page: PageId) => void;
@@ -11,19 +13,20 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
   return (
     <footer className="bg-[#0b0e10] border-t border-[#1B2226] text-[#9BA3A8] pt-16 pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+        <ScrollReveal
+          animation="stagger"
+          itemSelector=".footer-col"
+          stagger={0.08}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16"
+        >
           {/* Col 1: Brand & Identity */}
-          <div className="space-y-4">
+          <div className="footer-col space-y-4">
             <div className="flex items-center gap-3">
-              <img
-                src={IMAGES.logo}
-                alt="The Forge Fitness Logo"
-                referrerPolicy="no-referrer"
-                className="w-10 h-10 aspect-square object-contain rounded-full shadow-md"
+              <CascadeText
+                as="span"
+                className="font-heading font-black text-xl text-[#F5F7F8] tracking-wider uppercase"
+                text="THE FORGE FITNESS"
               />
-              <span className="font-heading font-black text-xl text-[#F5F7F8] tracking-wider uppercase">
-                THE FORGE FITNESS
-              </span>
             </div>
             
             <p className="text-sm leading-relaxed text-[#9BA3A8]">
@@ -49,47 +52,47 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           </div>
 
           {/* Col 2: Navigation */}
-          <div>
+          <div className="footer-col">
             <h4 className="font-heading font-bold text-sm tracking-wider uppercase text-[#F5F7F8] mb-5 border-l-2 border-[#D7FF00] pl-2.5">
               Explore
             </h4>
             <ul className="space-y-2.5 text-sm">
               <li>
                 <button
-                  onClick={() => { onNavigate('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  className="hover:text-[#F5F7F8] transition-colors"
+                  onClick={() => onNavigate('home')}
+                  className="hover:text-[#F5F7F8] transition-colors cursor-pointer"
                 >
                   Home
                 </button>
               </li>
               <li>
                 <button
-                  onClick={() => { onNavigate('training'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  className="hover:text-[#F5F7F8] transition-colors"
+                  onClick={() => onNavigate('training')}
+                  className="hover:text-[#F5F7F8] transition-colors cursor-pointer"
                 >
                   Training Disciplines
                 </button>
               </li>
               <li>
                 <button
-                  onClick={() => { onNavigate('membership'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  className="hover:text-[#F5F7F8] transition-colors"
+                  onClick={() => onNavigate('membership')}
+                  className="hover:text-[#F5F7F8] transition-colors cursor-pointer"
                 >
                   Membership Plans
                 </button>
               </li>
               <li>
                 <button
-                  onClick={() => { onNavigate('the-forge'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  className="hover:text-[#F5F7F8] transition-colors"
+                  onClick={() => onNavigate('the-forge')}
+                  className="hover:text-[#F5F7F8] transition-colors cursor-pointer"
                 >
                   The Forge Facility & Mindset
                 </button>
               </li>
               <li>
                 <button
-                  onClick={() => { onNavigate('contact'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-                  className="hover:text-[#F5F7F8] transition-colors"
+                  onClick={() => onNavigate('contact')}
+                  className="hover:text-[#F5F7F8] transition-colors cursor-pointer"
                 >
                   Contact & Location
                 </button>
@@ -98,7 +101,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           </div>
 
           {/* Col 3: Training Disciplines */}
-          <div>
+          <div className="footer-col">
             <h4 className="font-heading font-bold text-sm tracking-wider uppercase text-[#F5F7F8] mb-5 border-l-2 border-[#D7FF00] pl-2.5">
               Disciplines
             </h4>
@@ -126,7 +129,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           </div>
 
           {/* Col 4: Facility Info & Hours */}
-          <div className="space-y-4">
+          <div className="footer-col space-y-4">
             <h4 className="font-heading font-bold text-sm tracking-wider uppercase text-[#F5F7F8] mb-5 border-l-2 border-[#D7FF00] pl-2.5">
               Location & Hours
             </h4>
@@ -168,7 +171,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               <ArrowUpRight className="w-3.5 h-3.5" />
             </a>
           </div>
-        </div>
+        </ScrollReveal>
 
         {/* Concept Notice & Copyright */}
         <div className="pt-8 border-t border-[#1B2226] flex flex-col md:flex-row items-start md:items-center justify-between gap-4 text-xs text-[#9BA3A8]/70">

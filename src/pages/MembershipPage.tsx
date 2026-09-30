@@ -1,219 +1,143 @@
 import React from 'react';
-import { Check, AlertCircle, Phone, ArrowRight } from 'lucide-react';
-import { PRICING_GENERAL, PRICING_WITH_PT, BUSINESS_INFO } from '../data/gymData';
+import { AlertCircle, Phone } from 'lucide-react';
+import { BUSINESS_INFO, IMAGES } from '../data/gymData';
 import { PageId } from '../components/Navbar';
+import { ScrollReveal } from '../components/ui/ScrollReveal';
+import { PricingFanSection } from '../components/PricingFanSection';
+import { CardContainer, CardBody, CardItem } from '../components/ui/ThreeDCard';
+import { CascadeText } from '../components/ui/CascadeText';
+import { CheckoutPlanSelection } from '../utils/payment';
 
 interface MembershipPageProps {
   onNavigate: (page: PageId) => void;
   onOpenJoin: (interest?: string) => void;
+  onSelectPlan?: (selection: CheckoutPlanSelection) => void;
 }
 
-export const MembershipPage: React.FC<MembershipPageProps> = ({ onNavigate, onOpenJoin }) => {
+export const MembershipPage: React.FC<MembershipPageProps> = ({
+  onNavigate,
+  onOpenJoin,
+  onSelectPlan,
+}) => {
   return (
-    <div className="min-h-screen bg-[#101417] text-[#F5F7F8] pt-20 sm:pt-24 landscape:pt-14 pb-20 landscape:pb-8">
-      {/* Hero Header */}
-      <section className="border-b border-[#1B2226] bg-[#141A1E]/60 py-10 sm:py-20 landscape:py-6">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-4xl">
-          <span className="text-xs font-mono tracking-widest text-[#D7FF00] uppercase">
+    <div className="min-h-screen bg-[#101417] text-[#F5F7F8] pb-20">
+      {/* Cinematic Hero Header */}
+      <section className="relative pt-32 sm:pt-40 pb-16 sm:pb-24 overflow-hidden border-b border-[#1B2226]">
+        {/* Background Gym Image with dark industrial gradient overlay */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src={IMAGES.personalTraining}
+            alt="The Forge Membership Training"
+            className="w-full h-full object-cover object-center filter grayscale-[35%] brightness-[35%] contrast-[115%]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#101417] via-[#101417]/75 to-[#101417]/90" />
+          <div className="absolute inset-0 bg-radial from-transparent via-[#101417]/50 to-[#101417]/95" />
+        </div>
+
+        <ScrollReveal
+          animation="hero"
+          itemSelector=".hero-item"
+          stagger={0.12}
+          className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-4xl"
+        >
+          <span className="hero-item inline-block text-xs font-mono tracking-widest text-[#D7FF00] uppercase bg-[#1B2226]/80 border border-[#2d373c] px-3.5 py-1 mb-4 backdrop-blur-sm">
             MEMBERSHIP TIERS
           </span>
-          <h1 className="font-heading font-black text-3xl sm:text-6xl lg:text-7xl landscape:text-2xl uppercase tracking-tight text-[#F5F7F8] mt-2 mb-3">
-            CHOOSE YOUR COMMITMENT.
-          </h1>
-          <p className="text-xs sm:text-base text-[#9BA3A8] max-w-2xl mx-auto leading-relaxed px-2">
+          <CascadeText
+            as="h1"
+            className="hero-item font-heading font-black text-4xl sm:text-6xl lg:text-7xl uppercase tracking-tight text-[#F5F7F8] drop-shadow-[0_4px_24px_rgba(0,0,0,0.8)] mt-2 mb-4"
+          >
+            CHOOSE YOUR{' '}
+            <span className="text-[#D7FF00] drop-shadow-[0_0_35px_rgba(215,255,0,0.3)]">
+              COMMITMENT.
+            </span>
+          </CascadeText>
+          <p className="hero-item text-sm sm:text-lg text-[#9BA3A8] max-w-2xl mx-auto leading-relaxed px-2 font-medium">
             Straightforward pricing with zero complicated contracts. Train on your own schedule or pair with dedicated personal coaching.
           </p>
 
-          {/* Sample Pricing Notice Badge - Bold & Clear */}
-          <div className="mt-4 sm:mt-8 inline-flex items-center gap-2 bg-[#1B2226] border border-[#D6A83A]/40 px-3.5 py-1.5 text-xs text-[#D6A83A] font-mono">
+          {/* Sample Pricing Notice Badge */}
+          <div className="hero-item mt-6 inline-flex items-center gap-2 bg-[#1B2226]/90 border border-[#D6A83A]/60 px-4 py-1.5 text-xs text-[#D6A83A] font-mono shadow-md backdrop-blur-sm">
             <AlertCircle className="w-4 h-4 text-[#D6A83A] shrink-0" />
             <span>Concept / Sample Pricing</span>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
 
-      {/* Main Pricing Groups */}
-      <section className="py-10 sm:py-16 landscape:py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="space-y-12 sm:space-y-16 landscape:space-y-8">
-          {/* GROUP 1: WITHOUT PERSONAL TRAINER */}
-          <div>
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 sm:mb-8 pb-4 border-b border-[#1B2226]">
-              <div>
-                <span className="text-xs font-mono text-[#D7FF00] uppercase tracking-wider">
-                  STANDARD GYM ACCESS
-                </span>
-                <h2 className="font-heading font-black text-2xl sm:text-4xl uppercase tracking-tight text-[#F5F7F8] mt-1">
-                  WITHOUT PERSONAL TRAINER
-                </h2>
-              </div>
-              <p className="text-xs text-[#9BA3A8] mt-1 sm:mt-0 font-mono">
-                Full floor & discipline access · Open daily until 12 AM
-              </p>
-            </div>
+      {/* Main Pricing Section: Card Fan & Trainer Toggle */}
+      <section className="py-12 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <PricingFanSection onOpenJoin={onOpenJoin} onSelectPlan={onSelectPlan} />
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-              {PRICING_GENERAL.map((plan) => (
-                <div
-                  key={plan.duration}
-                  className={`bg-[#1B2226] border p-6 flex flex-col justify-between relative transition-all ${
-                    plan.isPopular
-                      ? 'border-[#D7FF00] ring-1 ring-[#D7FF00]/30'
-                      : 'border-[#263138] hover:border-[#38464f]'
-                  }`}
-                >
-                  {plan.isPopular && (
-                    <div className="absolute -top-3 right-4 bg-[#D7FF00] text-[#101417] px-2.5 py-0.5 text-[10px] font-heading font-black uppercase tracking-wider">
-                      MOST POPULAR
-                    </div>
-                  )}
-
-                  <div>
-                    <span className="text-xs font-mono text-[#9BA3A8] uppercase tracking-widest">
-                      MEMBERSHIP
-                    </span>
-                    <h3 className="font-heading font-black text-2xl uppercase tracking-wide text-[#F5F7F8] mt-1">
-                      {plan.duration}
-                    </h3>
-
-                    <div className="mt-6 mb-2">
-                      <span className="font-heading font-black text-4xl sm:text-5xl text-[#F5F7F8]">
-                        {plan.price}
-                      </span>
-                    </div>
-
-                    <p className="text-xs text-[#9BA3A8] font-mono mb-6">
-                      {plan.periodText}
-                    </p>
-
-                    <ul className="space-y-2.5 text-xs text-[#9BA3A8] border-t border-[#263138] pt-4">
-                      <li className="flex items-center gap-2">
-                        <Check className="w-3.5 h-3.5 text-[#D7FF00] shrink-0" />
-                        <span>Weight training floor access</span>
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <Check className="w-3.5 h-3.5 text-[#D7FF00] shrink-0" />
-                        <span>CrossFit & cycling zones</span>
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <Check className="w-3.5 h-3.5 text-[#D7FF00] shrink-0" />
-                        <span>Open until 12 AM midnight</span>
-                      </li>
-                    </ul>
-                  </div>
-
-                  <div className="mt-8 pt-4 border-t border-[#263138]">
-                    <button
-                      onClick={() => onOpenJoin(`Without PT - ${plan.duration} (${plan.price})`)}
-                      className="w-full bg-[#101417] hover:bg-[#D7FF00] hover:text-[#101417] border border-[#2d373c] hover:border-transparent text-[#F5F7F8] py-3 text-xs font-heading font-bold uppercase tracking-wider transition-colors cursor-pointer"
-                    >
-                      SELECT {plan.duration.toUpperCase()}
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* GROUP 2: WITH PERSONAL TRAINER */}
-          <div>
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 sm:mb-8 pb-4 border-b border-[#1B2226]">
-              <div>
-                <span className="text-xs font-mono text-[#D6A83A] uppercase tracking-wider">
-                  DEDICATED 1-ON-1 COACHING
-                </span>
-                <h2 className="font-heading font-black text-2xl sm:text-4xl uppercase tracking-tight text-[#F5F7F8] mt-1">
-                  WITH PERSONAL TRAINER
-                </h2>
-              </div>
-              <p className="text-xs text-[#9BA3A8] mt-1 sm:mt-0 font-mono">
-                Includes personal training programming & technique guidance
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-              {PRICING_WITH_PT.map((plan) => (
-                <div
-                  key={plan.duration}
-                  className={`bg-[#1B2226] border p-6 flex flex-col justify-between relative transition-all ${
-                    plan.isPopular
-                      ? 'border-[#D6A83A] ring-1 ring-[#D6A83A]/30'
-                      : 'border-[#263138] hover:border-[#38464f]'
-                  }`}
-                >
-                  {plan.isPopular && (
-                    <div className="absolute -top-3 right-4 bg-[#D6A83A] text-[#101417] px-2.5 py-0.5 text-[10px] font-heading font-black uppercase tracking-wider">
-                      RECOMMENDED
-                    </div>
-                  )}
-
-                  <div>
-                    <span className="text-xs font-mono text-[#D6A83A] uppercase tracking-widest">
-                      PT INCLUDED
-                    </span>
-                    <h3 className="font-heading font-black text-2xl uppercase tracking-wide text-[#F5F7F8] mt-1">
-                      {plan.duration}
-                    </h3>
-
-                    <div className="mt-6 mb-2">
-                      <span className="font-heading font-black text-4xl sm:text-5xl text-[#F5F7F8]">
-                        {plan.price}
-                      </span>
-                    </div>
-
-                    <p className="text-xs text-[#9BA3A8] font-mono mb-6">
-                      {plan.periodText}
-                    </p>
-
-                    <ul className="space-y-2.5 text-xs text-[#9BA3A8] border-t border-[#263138] pt-4">
-                      <li className="flex items-center gap-2">
-                        <Check className="w-3.5 h-3.5 text-[#D6A83A] shrink-0" />
-                        <span>Dedicated 1-on-1 trainer</span>
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <Check className="w-3.5 h-3.5 text-[#D6A83A] shrink-0" />
-                        <span>Tailored progressive programming</span>
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <Check className="w-3.5 h-3.5 text-[#D6A83A] shrink-0" />
-                        <span>Form corrections & accountability</span>
-                      </li>
-                    </ul>
-                  </div>
-
-                  <div className="mt-8 pt-4 border-t border-[#263138]">
-                    <button
-                      onClick={() => onOpenJoin(`With PT - ${plan.duration} (${plan.price})`)}
-                      className="w-full bg-[#101417] hover:bg-[#D7FF00] hover:text-[#101417] border border-[#2d373c] hover:border-transparent text-[#F5F7F8] py-3 text-xs font-heading font-bold uppercase tracking-wider transition-colors cursor-pointer"
-                    >
-                      SELECT {plan.duration.toUpperCase()}
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+        {/* Pricing Disclaimer Note */}
+        <div className="mt-12 sm:mt-16">
+          <ScrollReveal animation="fade-up">
+            <CardContainer maxTilt={5} className="w-full">
+              <CardBody className="p-6 bg-[#141A1E] border border-[#263138] text-xs text-[#9BA3A8] space-y-2 font-mono rounded-xl shadow-lg">
+                <CardItem translateZ={15}>
+                  <p className="font-bold text-white uppercase tracking-wider">
+                    Important Pricing Transparency Notice:
+                  </p>
+                </CardItem>
+                <CardItem translateZ={10}>
+                  <p>
+                    * The standard facility membership fee is ₹800/month. The extended duration plans and Personal Training options shown above are sample/concept pricing structures for illustrative purposes and subject to direct facility confirmation.
+                  </p>
+                </CardItem>
+                <CardItem translateZ={12}>
+                  <p>
+                    For precise active batch rates, personal trainer availability, and special packages, please call us directly at{' '}
+                    <a href={`tel:${BUSINESS_INFO.phoneRaw}`} className="text-[#D7FF00] underline font-bold">
+                      {BUSINESS_INFO.phone}
+                    </a>{' '}
+                    or visit our reception on the First Floor, Block G, Budh Vihar Phase I.
+                  </p>
+                </CardItem>
+              </CardBody>
+            </CardContainer>
+          </ScrollReveal>
         </div>
 
-        {/* Disclaimer / Concept Notice Box */}
-        <div className="mt-16 p-6 bg-[#141A1E] border border-[#263138] flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div className="space-y-1">
-            <span className="text-xs font-mono font-bold text-[#D6A83A] uppercase tracking-wider">
-              PRICING NOTICE & VERIFICATION
-            </span>
-            <p className="text-xs text-[#9BA3A8] leading-relaxed max-w-2xl">
-              Concept / Sample Pricing. ₹800 is the base 1-month rate. Pricing other than ₹800/month is concept/sample pricing and must not be presented as verified official pricing. Contact the front desk for current offers or special seasonal terms.
-            </p>
-          </div>
+        {/* Bottom Consultation Box */}
+        <div className="mt-10 sm:mt-12">
+          <ScrollReveal animation="fade-up">
+            <CardContainer maxTilt={7} className="w-full">
+              <CardBody className="p-8 sm:p-12 bg-[#1B2226] border border-[#263138] flex flex-col md:flex-row items-center justify-between gap-6 rounded-2xl shadow-2xl">
+                <div>
+                  <CardItem translateZ={25}>
+                    <span className="text-xs font-mono text-[#D7FF00] uppercase tracking-wider">
+                      NEED ADVICE?
+                    </span>
+                  </CardItem>
+                  <CardItem translateZ={40}>
+                    <h3 className="font-heading font-black text-2xl sm:text-3xl uppercase tracking-tight text-[#F5F7F8] mt-1">
+                      Not sure which plan fits your goals?
+                    </h3>
+                  </CardItem>
+                  <CardItem translateZ={20}>
+                    <p className="text-xs sm:text-sm text-[#9BA3A8] mt-1 max-w-xl">
+                      Speak directly with our trainers at the front desk. We can assess your conditioning background and suggest the right training path.
+                    </p>
+                  </CardItem>
+                </div>
 
-          <div className="flex items-center gap-3 shrink-0">
-            <a
-              href={`tel:${BUSINESS_INFO.phoneRaw}`}
-              className="bg-[#D7FF00] text-[#101417] px-6 py-3 text-xs font-heading font-black uppercase tracking-wider hover:bg-[#c6ec00] transition-colors flex items-center gap-2"
-            >
-              <Phone className="w-3.5 h-3.5" />
-              <span>Call: {BUSINESS_INFO.phone}</span>
-            </a>
-          </div>
+                <CardItem translateZ={35} className="flex flex-col sm:flex-row gap-3 w-full md:w-auto shrink-0">
+                  <button
+                    onClick={() => onOpenJoin('Plan Consultation')}
+                    className="bg-[#D7FF00] text-[#101417] px-6 py-3.5 text-xs font-heading font-black uppercase tracking-wider hover:bg-[#c6ec00] transition-colors cursor-pointer text-center rounded-lg shadow-md active:scale-95"
+                  >
+                    REQUEST CONSULTATION
+                  </button>
+                  <a
+                    href={`tel:${BUSINESS_INFO.phoneRaw}`}
+                    className="bg-[#101417] border border-[#2d373c] text-[#F5F7F8] px-6 py-3.5 text-xs font-heading font-bold uppercase tracking-wider hover:border-[#D7FF00] transition-colors flex items-center justify-center gap-2 rounded-lg active:scale-95"
+                  >
+                    <Phone className="w-3.5 h-3.5 text-[#D7FF00]" />
+                    <span>Call {BUSINESS_INFO.phone}</span>
+                  </a>
+                </CardItem>
+              </CardBody>
+            </CardContainer>
+          </ScrollReveal>
         </div>
       </section>
     </div>

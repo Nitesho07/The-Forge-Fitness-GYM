@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Phone, MessageSquare, Check, ArrowRight } from 'lucide-react';
 import { BUSINESS_INFO } from '../data/gymData';
+import { CascadeText } from './ui/CascadeText';
 
 interface JoinModalProps {
   isOpen: boolean;
@@ -17,6 +18,24 @@ export const JoinModal: React.FC<JoinModalProps> = ({
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      setSelectedPlan(initialInterest);
+      setSubmitted(false);
+
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') onClose();
+      };
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      window.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.body.style.overflow = originalOverflow;
+        window.removeEventListener('keydown', handleKeyDown);
+      };
+    }
+  }, [isOpen, initialInterest, onClose]);
 
   if (!isOpen) return null;
 
@@ -52,9 +71,11 @@ export const JoinModal: React.FC<JoinModalProps> = ({
             <div className="w-12 h-12 bg-[#D7FF00]/10 border border-[#D7FF00] text-[#D7FF00] flex items-center justify-center mx-auto">
               <Check className="w-6 h-6" />
             </div>
-            <h3 className="font-heading font-bold text-2xl uppercase tracking-wider text-[#F5F7F8]">
-              Inquiry Received
-            </h3>
+            <CascadeText
+              as="h3"
+              className="font-heading font-bold text-2xl uppercase tracking-wider text-[#F5F7F8]"
+              text="Inquiry Received"
+            />
             <p className="text-sm text-[#9BA3A8] max-w-sm mx-auto">
               Thank you, {name || 'Athlete'}! You can also call directly or visit our Budh Vihar gym during open hours.
             </p>
@@ -83,9 +104,11 @@ export const JoinModal: React.FC<JoinModalProps> = ({
               <span className="text-[11px] font-mono uppercase tracking-widest text-[#D7FF00]">
                 START TRAINING
               </span>
-              <h2 className="font-heading font-black text-2xl sm:text-3xl uppercase tracking-wider mt-1 text-[#F5F7F8]">
-                JOIN THE FORGE
-              </h2>
+              <CascadeText
+                as="h2"
+                className="font-heading font-black text-2xl sm:text-3xl uppercase tracking-wider mt-1 text-[#F5F7F8]"
+                text="JOIN THE FORGE"
+              />
               <p className="text-xs text-[#9BA3A8] mt-1">
                 Budh Vihar Phase I · Open daily until 12 AM
               </p>
@@ -113,14 +136,26 @@ export const JoinModal: React.FC<JoinModalProps> = ({
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs uppercase font-medium tracking-wider text-[#9BA3A8] mb-1.5">
+                <label htmlFor="join-plan-select" className="block text-xs uppercase font-medium tracking-wider text-[#9BA3A8] mb-1.5">
                   Interested Discipline / Plan
                 </label>
                 <select
+                  id="join-plan-select"
                   value={selectedPlan}
                   onChange={(e) => setSelectedPlan(e.target.value)}
                   className="w-full bg-[#1B2226] border border-[#2d373c] px-3.5 py-2.5 text-sm text-[#F5F7F8] focus:border-[#D7FF00] focus:outline-none"
                 >
+                  {![
+                    'General Membership (₹800/mo base)',
+                    'General Membership',
+                    'CrossFit',
+                    'Weight Training',
+                    'Cycling',
+                    'Personal Training',
+                    'Quarterly / Half-Year Commitment',
+                  ].includes(selectedPlan) && (
+                    <option value={selectedPlan}>{selectedPlan}</option>
+                  )}
                   <option value="General Membership (₹800/mo base)">General Membership (₹800/mo base)</option>
                   <option value="CrossFit">CrossFit Training</option>
                   <option value="Weight Training">Weight Training</option>
@@ -131,10 +166,11 @@ export const JoinModal: React.FC<JoinModalProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs uppercase font-medium tracking-wider text-[#9BA3A8] mb-1.5">
+                <label htmlFor="join-name-input" className="block text-xs uppercase font-medium tracking-wider text-[#9BA3A8] mb-1.5">
                   Your Name
                 </label>
                 <input
+                  id="join-name-input"
                   type="text"
                   required
                   placeholder="Enter your name"
@@ -145,10 +181,11 @@ export const JoinModal: React.FC<JoinModalProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs uppercase font-medium tracking-wider text-[#9BA3A8] mb-1.5">
+                <label htmlFor="join-phone-input" className="block text-xs uppercase font-medium tracking-wider text-[#9BA3A8] mb-1.5">
                   Phone Number
                 </label>
                 <input
+                  id="join-phone-input"
                   type="tel"
                   required
                   placeholder="e.g. 98765 43210"
